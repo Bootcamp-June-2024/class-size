@@ -1,0 +1,48 @@
+---
+title: "Class Size"
+author: "David Kane"
+format: html
+execute: 
+  echo: false
+---
+
+```{r}
+#| label: setup
+#| message: false
+
+library(tidyverse)
+
+
+x <- read_csv("data/STAR.csv", show_col_types = FALSE)
+```
+
+
+Question? class size and g4math
+
+What is the causal effect a class size on g4math?
+
+Quantity of Interest
+
+Preceptor Table
+
+units: students (who) when
+
+covariates: class size, race
+
+outcome: g4math
+
+
+Population Table
+
+One counter-arguments for each of the four key assumptions we make with the Population Table.
+
+Validity: 
+
+Stability: education system 
+
+Representativeness: Tenessee
+
+Unconfoundedness: 
+
+
+

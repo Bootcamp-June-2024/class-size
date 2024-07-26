@@ -13,6 +13,7 @@ execute:
 library(tidyverse)
 library(brms)
 library(tidybayes)
+library(gtsummary)
 
 raw_df <- read_csv("data/STAR.csv", show_col_types = FALSE)
 ```
@@ -55,6 +56,39 @@ fit_cs <- brm(formula = g4math ~ kinder,
 
 
 ```{r}
-fit_cs
+ndata <- tibble(kinder = c("small", "regular"))
 ```
+
+```{r}
+fit_cs |>
+  add_epred_draws(newdata = ndata) |> 
+  ungroup() |>
+  select(kinder, .epred) |>
+  ggplot(aes(x = .epred, fill = kinder)) +
+    geom_density(alpha = 0.5) +
+    labs(title = "Posterior for Exam Score",
+         subtitle = "Class size has no effect on exam score",
+         x = "Exam Score",
+         fill = "Classroom Size",
+         caption = "Data from Tennessee STAR Experiment") +
+    theme(
+      axis.title.y = element_blank(),
+      axis.text.y = element_blank(),
+      axis.ticks.y = element_blank(),
+      axis.line.y = element_blank()
+    )
+```
+
+Using data from the 1980s STAR experiment in Tennessee elementary schools, we seek to understand the relationship between math achievement and class size for Boston schools today. The relationship between class size and academic performance may have changed over the last 40 years. We modeled fourth grade math scores as a linear function of class size, a variable with two possible values: small and regular. Surprisingly, students in smaller classes performed less well. The causal effect of being assigned to a smaller class was slightly negative, but the uncertainty interval was very wide --- with an estimated standardized effect size ranging from -0.1 to 0.1 --- leaving us with little information about how a similar program might perform in Boston elementary schools today.
+
+
+$$ score_i = \beta_0 + \beta_1 class\_size $$
+
+```{r}
+fit_cs |> 
+  tbl_regression()
+```
+
+
+
 
